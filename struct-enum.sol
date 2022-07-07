@@ -20,11 +20,13 @@ contract Struct {
     }
 
     Order[] public orders;
+    uint public txCount;
 
 
 
-    function createOrder(string memory _zipCode, uint[] memory _products) external returns(uint) {
-        require(_products.length > 0, "No products");
+
+    function createOrder(string memory _zipCode, uint[] memory _products)incTx checkOrder(_products)  external returns(uint) {
+        // require(_products.length > 0, "No products");
 
         /*Order memory order;
         order.customer  = msg.sender;
@@ -55,9 +57,9 @@ contract Struct {
         owner = msg.sender;
     }
 
-    function advenceOrder(uint _orderId) external {
-        require(owner == msg.sender, "You are not a authorized.");
-        require(_orderId < orders.length, "Not a valid order Id");
+    function advenceOrder(uint _orderId) onlyOwner() checkOrderId(_orderId) external {
+        // require(owner == msg.sender, "You are not a authorized.");
+        // require(_orderId < orders.length, "Not a valid order Id");
         
         Order storage order = orders[_orderId];
         require(order.status != Status.Shipped, "Order is already shipped.");
@@ -72,8 +74,8 @@ contract Struct {
     }
 
 
-    function getOrder(uint _orderId) external view returns(Order memory) {
-        require(_orderId < orders.length, "Not a valid order Id");
+    function getOrder(uint _orderId) checkOrderId(_orderId) external view returns(Order memory) {
+        // require(_orderId < orders.length, "Not a valid order Id");
         /*
         Order memory order = orders[_orderId];
         return order;
@@ -81,10 +83,36 @@ contract Struct {
         return orders[_orderId];
     }
 
-    function updateZip(uint _orderId, string memory _zip) external{
-        require(_orderId < orders.length, "Not a valid order Id");
+    function updateZip(uint _orderId, string memory _zip)onlyCustomer(_orderId) incTx checkOrderId(_orderId) external{
+        // require(_orderId < orders.length, "Not a valid order Id");
         Order storage order = orders[_orderId];
-        require(order.customer == msg.sender, "You are not the owner of the order.");
+        // require(order.customer == msg.sender, "You are not the owner of the order.");
         order.zipCode = _zip; 
+    }
+
+    modifier checkOrder(uint[] memory _products) {
+        require(_products.length > 0, "No products");
+        _;
+    }
+
+    modifier checkOrderId(uint _orderId) {
+        require(_orderId < orders.length, "Not a valid order Id");
+        _;
+    }
+
+    modifier incTx {
+        _;
+        txCount++;
+    }
+
+    modifier onlyOwner() {
+        require(owner == msg.sender, "You are not a authorized.");
+        _;
+    }
+
+    modifier onlyCustomer(uint _orderId) {
+        require(orders[_orderId].customer == msg.sender, "You are not the owner of the order.");
+        _;
+
     }
 }
