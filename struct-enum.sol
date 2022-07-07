@@ -3,7 +3,7 @@
 
 pragma solidity ^0.8.0;
 
-contract Struct {
+contract Event {
 
     enum Status {
         Taken,          //0
@@ -21,6 +21,10 @@ contract Struct {
 
     Order[] public orders;
     uint public txCount;
+
+
+    event Ordercreate(uint _orderId, address indexed _consumer);
+    event Zipchange(uint _orderId, string _zipCode);
 
 
 
@@ -47,6 +51,8 @@ contract Struct {
 
 
         orders.push(Order(msg.sender, _zipCode, _products, Status.Taken)); //Struct oluşturmanın 3. Yolu
+
+        emit Ordercreate(orders.length - 1, msg.sender);
 
         return orders.length-1;
     }
@@ -88,6 +94,7 @@ contract Struct {
         Order storage order = orders[_orderId];
         // require(order.customer == msg.sender, "You are not the owner of the order.");
         order.zipCode = _zip; 
+        emit Zipchange(_orderId, _zip);
     }
 
     modifier checkOrder(uint[] memory _products) {
