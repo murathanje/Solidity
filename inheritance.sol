@@ -8,7 +8,7 @@ contract A {
     uint256 public y;
 
 
-    function a(uint256 _x) external {
+    function a(uint256 _x) virtual external {
         x = _x;    
     
     }
@@ -23,5 +23,12 @@ contract A {
 
 
 contract B is A{
+
     
+    function a(uint256 _x) override external {
+        x = _x;    
+    
+    }
+
+
 }
