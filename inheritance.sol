@@ -32,3 +32,23 @@ contract B is A{
 
 
 }
+
+
+
+contract Human {
+    function sayHello() public pure virtual returns(string memory) {
+        return "merhabalar, lutfen kayit olunuz.";
+    }
+}
+
+
+
+contract SuperHuman is Human{
+        function sayHello() public pure override returns(string memory) {
+            return "nasilsin?";
+        }
+
+        function welcome(bool isMember) public pure returns(string memory) {
+            return isMember ? sayHello(): Human.sayHello();
+        }
+}
