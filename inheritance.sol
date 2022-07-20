@@ -49,6 +49,6 @@ contract SuperHuman is Human{
         }
 
         function welcome(bool isMember) public pure returns(string memory) {
-            return isMember ? sayHello(): Human.sayHello();
+            return isMember ? sayHello(): Human.sayHello();  //super.sayHello()
         }
 }
