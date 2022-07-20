@@ -52,3 +52,7 @@ contract SuperHuman is Human{
             return isMember ? sayHello(): Human.sayHello();  //super.sayHello()
         }
 }
+
+
+
+// import "https//::...         şeklinde de kontrat bağlanabilir."
